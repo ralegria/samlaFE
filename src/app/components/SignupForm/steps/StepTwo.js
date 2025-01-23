@@ -5,8 +5,9 @@ import { Form, Select } from "antd";
 
 const StepTwo = () => {
   const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchStates = async () => {
       try {
         const response = await axios.get(
           "https://samlabe-production.up.railway.app/api/states/"
@@ -17,10 +18,19 @@ const StepTwo = () => {
       }
     };
 
-    fetchData();
+    fetchStates();
   }, []);
 
-  console.log(states);
+  const fetchCities = async (stateId) => {
+    try {
+      const response = await axios.get(
+        `https://samlabe-production.up.railway.app/api/states/${stateId}/cities`
+      );
+      setCities(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-[24px]">
@@ -34,10 +44,30 @@ const StepTwo = () => {
           },
         ]}
       >
+        <Select onChange={(value) => fetchCities(value)}>
+          {states.map((state) => (
+            <Select.Option key={state._id} value={state._id}>
+              {state.name}
+            </Select.Option>
+          ))}
+        </Select>
+      </Form.Item>
+      <Form.Item
+        label="Municipio"
+        name="city"
+        rules={[
+          {
+            required: true,
+            message: "Por favor elige una opción",
+          },
+        ]}
+      >
         <Select>
-          <Select.Option value="DUI">DUI</Select.Option>
-          <Select.Option value="NIT">NIT</Select.Option>
-          <Select.Option value="Pasaporte">Pasaporte</Select.Option>
+          {cities.map((city) => (
+            <Select.Option key={city.id_mun} value={city.id_mun}>
+              {city.name}
+            </Select.Option>
+          ))}
         </Select>
       </Form.Item>
     </div>
