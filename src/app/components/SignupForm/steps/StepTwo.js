@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Form, Input, Select } from "antd";
+import { Form, Select } from "antd";
 
 const StepTwo = () => {
   const [states, setStates] = useState([]);
