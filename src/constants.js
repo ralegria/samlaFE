@@ -14,3 +14,8 @@ export const departamentos = [
   { value: "MO", label: "Morazán" },
   { value: "UN", label: "La Unión" },
 ];
+
+export const STEPS = {
+  BACKWARD: "BACKWARDS",
+  FORWARD: "FORWARD",
+};
