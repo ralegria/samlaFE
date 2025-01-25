@@ -1,55 +1,57 @@
 "use client";
-import { useState } from "react";
 import { Button, Form } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { setStep, updateField } from "../../redux/slices/CustomerSlice";
+import { STEPS } from "../../../constants";
+
 import StepOne from "./steps/StepOne";
 import StepTwo from "./steps/StepTwo";
 
 import "./SignupForm.scss";
 
-const data = {
-  names: null,
-  lastnames: null,
-  email: null,
-  phone_number: null,
-  ID_type: "DUI",
-  ID_number: null,
-  address_line1: null,
-  address_line2: null,
-  state: null,
-  city: null,
-  mo_earns: null,
-  ID_photo_front: null,
-  ID_photo_back: null,
-  selfie: null,
-};
-
 const SignupForm = () => {
-  const [formData, setFormData] = useState(data);
+  const dispatch = useDispatch();
+  const currentStep = useSelector((state) => state.customerForm.formStep);
 
-  const onChange = (values) => {
-    setFormData({ ...formData, ...values });
+  //const [currentStep, setCurrentStep] = useState(2);
+
+  const onFormChange = (values) => {
+    const newValues = {
+      ...values,
+      mo_earnings: Number(values.mo_earnings) * 100,
+    };
+    dispatch(
+      updateField({
+        payload: newValues,
+      })
+    );
   };
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = () => {
+    dispatch(
+      setStep({
+        step: STEPS.FORWARD,
+      })
+    );
   };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  console.log(formData);
+  //console.log(formData);
 
   return (
     <Form
-      name="Step 1 Form"
-      onValuesChange={onChange}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
       autoComplete="off"
+      name="Signup Form"
+      onFinish={onFinish}
+      onValuesChange={onFormChange}
+      onFinishFailed={onFinishFailed}
       className="signup-form flex flex-col gap-[50px]"
     >
-      <StepOne />
-      <StepTwo />
+      {currentStep === 1 && <StepOne />}
+      {currentStep === 2 && <StepTwo />}
       <Form.Item label={null}>
         <Button
           htmlType="submit"

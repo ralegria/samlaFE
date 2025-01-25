@@ -56,6 +56,7 @@ const StepOne = () => {
       <Form.Item
         label="Tipo de identificación"
         name="ID_type"
+        initialValue={"DUI"}
         rules={[
           {
             required: true,
@@ -63,7 +64,7 @@ const StepOne = () => {
           },
         ]}
       >
-        <Select defaultValue={"DUI"} value={"DUI"}>
+        <Select>
           <Select.Option value="DUI">DUI</Select.Option>
           <Select.Option value="NIT">NIT</Select.Option>
           <Select.Option value="Pasaporte">Pasaporte</Select.Option>
@@ -76,6 +77,10 @@ const StepOne = () => {
           {
             required: true,
             message: "Por favor ingresa tu Número de identificación",
+          },
+          {
+            pattern: /^\d{8}-\d{1}$/,
+            message: "Por favor ingresa un número de identificación válido",
           },
         ]}
       >
